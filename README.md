@@ -6,6 +6,20 @@ Briefly, the goal is to create an undirected "conflict graph" of all transit rou
 
 The resulting graph coloring can be used to determine an ordering to safely traverse routes (Algorithm 1 L15) in parallel without worrying about shared memory corruption.
 
+## Usage
+
+Functions for computing the constraint graph and coloring are in `src/color.py` and require no external dependencies.
+
+In order to generate png output graphs you will need to install the `graphviz` library:
+```
+pip install -r requirements.txt
+```
+
+Running tests will also output the png graph, this can be done with:
+```
+make
+```
+
 ## Problem overview
 Given a limited set of RAPTOR data structures, provide a vertex coloring for the network. Here each Route is a vertex and an edge to another Route exists iff both Routes share a stop.
 
@@ -14,10 +28,10 @@ The output should be a color for each Route.
 A test network is defined as follows:
 ```
 route_1        3
-                |
+               |
 route_0   0 -- 1    2
-                |    |
-                4    5 - 7  route_3
+               |    |
+               4    5 - 7  route_3
                     |
 route_2             6
 ```
@@ -44,6 +58,14 @@ route_colors: [0, 1, 0, 1]
 ```
 
 The example happens to be bipartite and the example coloring is chromatic, but the input need not be and this algorithm will still handle it correctly.
+
+We can visualize the output for the example data above using `src/draw.py`. The uncolored constraint graph is:
+
+![constraintgraph](https://raw.githubusercontent.com/keyan/metro_coloring/master/output/uncolored.gv.png)
+
+After running the constraint graph through vertex coloring we get:
+
+![coloredgraph](https://raw.githubusercontent.com/keyan/metro_coloring/master/output/colored.gv.png)
 
 ## Real network
 

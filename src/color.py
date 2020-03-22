@@ -33,7 +33,6 @@ So a possible accurate coloring would be:
 The example happens to be bipartite and the example coloring is chromatic,
 but the input need not be and this algorithm will still handle it correctly.
 """
-import unittest
 from typing import List, Set
 
 ConstraintGraph = List[Set[int]]
@@ -105,41 +104,3 @@ def greedy_vertex_color(graph: ConstraintGraph) -> List[int]:
         coloring[route_id] = color
 
     return coloring
-
-
-class TestSolutions(unittest.TestCase):
-    def setUp(self):
-        self.routes_for_stops = [[0], [0, 1], [2], [1], [1], [2, 3], [2], [3]]
-        self.stops_for_routes = [[0, 1], [3, 1, 4], [2, 5, 6], [5, 7]]
-
-    def test_constraint_graph(self):
-        constraint_graph = construct_constraint_graph(
-            self.routes_for_stops,
-            self.stops_for_routes,
-        )
-
-        # There must be one set for each route/vertex.
-        self.assertTrue(len(constraint_graph) == len(self.stops_for_routes))
-
-        # As described in module docstring.
-        self.assertTrue(constraint_graph[0] == {1})
-        self.assertTrue(constraint_graph[1] == {0})
-        self.assertTrue(constraint_graph[2] == {3})
-        self.assertTrue(constraint_graph[3] == {2})
-
-    def test_coloring(self):
-        constraint_graph = construct_constraint_graph(
-            self.routes_for_stops,
-            self.stops_for_routes,
-        )
-        coloring = greedy_vertex_color(constraint_graph)
-
-        # There must be one color for each route/vertex.
-        self.assertTrue(len(coloring) == len(self.stops_for_routes))
-
-        # As described above, neighbors should be different colors.
-        self.assertTrue(coloring[0] != coloring[1])
-        self.assertTrue(coloring[2] != coloring[3])
-
-if __name__ == '__main__':
-    unittest.main()
