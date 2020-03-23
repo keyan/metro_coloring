@@ -6,6 +6,9 @@ Briefly, the goal is to create an undirected "conflict graph" of all transit rou
 
 The resulting graph coloring can be used to determine an ordering to safely traverse routes (Algorithm 1 L15) in parallel without worrying about shared memory corruption.
 
+A selection of the NYC MTA subway vertex coloring (See below for more details):
+![Sample section of MTA vertex coloring](https://raw.githubusercontent.com/keyan/metro_coloring/master/output/mta_demo.png)
+
 ## Usage
 
 Functions for computing the constraint graph and coloring are in `src/color.py` and require no external dependencies.
@@ -76,5 +79,4 @@ The processing time for this operation is high due to the size of the MTA networ
 make load_and_draw
 ```
 
-The MTA subway network only has 30 "GTFS routes", but RAPTOR defines routes differently resulting in 215 routes/vertices in the final network. This creates a very large graph which is hard to visually inspect in its entirety, but if you are interested it is include in the directory `output/`, just click on the section image below:
-![Sample section of MTA vertex coloring](https://raw.githubusercontent.com/keyan/metro_coloring/master/output/mta_colored.gv.png)
+The MTA subway network only has 30 "GTFS routes", but RAPTOR defines routes differently resulting in 215 routes/vertices in the final network. This creates a very large graph which is hard to visually inspect in its entirety, but if you are interested it is included here: https://github.com/keyan/metro_coloring/blob/master/output/mta_colored.gv.png
