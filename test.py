@@ -57,7 +57,9 @@ class TestDraw(unittest.TestCase):
             self.stops_for_routes,
         )
         coloring = greedy_vertex_color(constraint_graph)
-        draw(constraint_graph, coloring)
+        nodes = draw(constraint_graph, coloring)
+
+        self.assertEqual(4, nodes)
 
 
 if __name__ == '__main__':

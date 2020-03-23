@@ -31,15 +31,19 @@ def draw(
     route_names: List[int] = None,
     filename_prefix: str = '',
     view: bool = True,
-) -> None:
+) -> int:
     """
     Given a ConstraintGraph, construct two DOT graph visualizations
     of the ConstraintGraph, one which includes coloring and one which
     does not. These are both saves as pngs to /output.
+
+    Returns the number of nodes drawn in the graph output.
     """
     uncolored = Graph(comment='colored', format='png', graph_attr={'rankdir': 'LR'})
     colored = Graph(comment='colored', format='png', graph_attr={'rankdir': 'LR'})
 
+    added_uncolored = 0
+    added_colored = 0
     for route_id, edges in enumerate(graph):
         node_label = str(route_id)
 
@@ -50,6 +54,7 @@ def draw(
             name = f'route_{route_id}'
 
         uncolored.node(node_label, name)
+        added_uncolored += 1
 
         color = int_to_rgb(colors[route_id])
         colored.node(
@@ -60,9 +65,15 @@ def draw(
             style='filled',
             penwidth="3",
         )
+        added_colored += 1
 
         uncolored.edges([(node_label, str(edge_route_id)) for edge_route_id in edges])
         colored.edges([(node_label, str(edge_route_id)) for edge_route_id in edges])
 
+    assert added_uncolored == added_colored, f'Incompatible node count: {added_uncolored} vs. {added_colored}'
+    print(f'Collected {added_uncolored} uncolored nodes')
+
     uncolored.render(f'output/{filename_prefix}uncolored.gv', view=view)
     colored.render(f'output/{filename_prefix}colored.gv', view=view)
+
+    return added_uncolored
