@@ -67,6 +67,14 @@ After running the constraint graph through vertex coloring we get:
 
 ![coloredgraph](https://raw.githubusercontent.com/keyan/metro_coloring/master/output/colored.gv.png)
 
-## Real network
+## Real world (NYC MTA Subway) Network
 
-TODO - Color a real life metro network??
+There are an additional set of utilities provided to process raw agency GTFS and output the vertex coloring. As a demonstration the directory `gtfs/` contains NYC MTA subway GTFS data from [transitfeeds](https://transitfeeds.com/p/mta/79) which can be loaded into a local SQLite database for graph generation.
+
+The processing time for this operation is high due to the size of the MTA network, but should you be interested in generating the graph be patient and run:
+```
+make load_and_draw
+```
+
+The MTA subway network only has 30 "GTFS routes", but RAPTOR defines routes differently resulting in 215 routes/vertices in the final network. This creates a very large graph which is hard to visually inspect in its entirety, but if you are interested it is include in the directory `output/`, just click on the section image below:
+![Sample section of MTA vertex coloring](https://raw.githubusercontent.com/keyan/metro_coloring/master/output/mta_colored.gv.png)

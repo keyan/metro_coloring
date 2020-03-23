@@ -25,29 +25,44 @@ def int_to_rgb(value: int) -> str:
     return '#%02x%02x%02x' % (r, g, b)
 
 
-def draw(graph: ConstraintGraph, colors: List[int], view=True) -> None:
+def draw(
+    graph: ConstraintGraph,
+    colors: List[int],
+    route_names: List[int] = None,
+    filename_prefix: str = '',
+    view: bool = True,
+) -> None:
     """
     Given a ConstraintGraph, construct two DOT graph visualizations
     of the ConstraintGraph, one which includes coloring and one which
     does not. These are both saves as pngs to /output.
     """
-    uncolored = Graph(comment='uncolored', format='png')
-    colored = Graph(comment='colored', format='png')
+    uncolored = Graph(comment='colored', format='png', graph_attr={'rankdir': 'LR'})
+    colored = Graph(comment='colored', format='png', graph_attr={'rankdir': 'LR'})
 
     for route_id, edges in enumerate(graph):
-        name = f'route_{route_id}'
-        str_route_id = str(route_id)
+        node_label = str(route_id)
 
-        uncolored.node(str_route_id, name)
+        # If a GTFS route name mapping is provided use it to make the visualization nice.
+        if route_names is not None:
+            name = route_names[route_id]
+        else:
+            name = f'route_{route_id}'
+
+        uncolored.node(node_label, name)
+
+        color = int_to_rgb(colors[route_id])
         colored.node(
-            str_route_id,
+            node_label,
             name,
-            color=int_to_rgb(colors[route_id]),
+            color=color,
+            fillcolor=color,
+            style='filled',
             penwidth="3",
         )
 
-        uncolored.edges([(str_route_id, str(edge_route_id)) for edge_route_id in edges])
-        colored.edges([(str_route_id, str(edge_route_id)) for edge_route_id in edges])
+        uncolored.edges([(node_label, str(edge_route_id)) for edge_route_id in edges])
+        colored.edges([(node_label, str(edge_route_id)) for edge_route_id in edges])
 
-    uncolored.render('output/uncolored.gv', view=view)
-    colored.render('output/colored.gv', view=view)
+    uncolored.render(f'output/{filename_prefix}uncolored.gv', view=view)
+    colored.render(f'output/{filename_prefix}colored.gv', view=view)

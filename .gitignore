@@ -3,3 +3,5 @@
 .DS_Store
 .ignore
 __pycache__/
+
+gtfs/gtfs_db
